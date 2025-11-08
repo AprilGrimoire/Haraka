@@ -246,7 +246,7 @@ exports.load_tls_ini = (opts) => {
 
     if (!Array.isArray(cfg.main.no_starttls_ports)) cfg.main.no_starttls_ports = [];
 
-    this.cfg = cfg;
+    exports.cfg = cfg;
 
     if (!opts || opts.role === 'server') {
         this.applySocketOpts('*');
@@ -275,13 +275,13 @@ exports.applySocketOpts = name => {
 
     for (const opt of [ ...TLSSocketOptions, ...createSecureContextOptions ]) {
 
-        if (this.cfg[name] && this.cfg[name][opt] !== undefined) {
+        if (exports.cfg[name] && exports.cfg[name][opt] !== undefined) {
             // if the setting exists in tls.ini [name]
-            certsByHost.set([name, opt], this.cfg[name][opt])
+            certsByHost.set([name, opt], exports.cfg[name][opt])
         }
-        else if (this.cfg.main[opt] !== undefined) {
+        else if (exports.cfg.main[opt] !== undefined) {
             // save settings in tls.ini [main] to each CN
-            certsByHost.set([name, opt], this.cfg.main[opt])
+            certsByHost.set([name, opt], exports.cfg.main[opt])
         }
         else {
             // defaults
@@ -509,7 +509,7 @@ exports.ensureDhparams = done => {
 
     if (cluster.isWorker) return; // only once, on the master process
 
-    const filePath = this.cfg.main.dhparam || 'dhparams.pem';
+    const filePath = exports.cfg.main.dhparam || 'dhparams.pem';
     const fpResolved = path.resolve(exports.config.root_path, filePath);
 
     log.info(`Generating a 2048 bit dhparams file at ${fpResolved}`);
