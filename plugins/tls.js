@@ -47,8 +47,8 @@ exports.advertise_starttls = function (next, connection) {
     if (tls_socket.cfg.main.no_starttls_ports.includes(connection.local.port)) return next();
 
     this.logwarn('ATTENTION!!!')
-    this.logwarn(`${JSON.stringify(this.server.cfg)}`);
-    const enable_tls_ports = this.server.cfg.main.enable_tls_ports || [587];
+    this.logwarn(`${JSON.stringify(connection.server.cfg)}`);
+    const enable_tls_ports = connection.server.cfg.main.enable_tls_ports || [587];
     // exclude ports from NO-GO
     if (enable_tls_ports.includes(connection.local.port)) return enable_tls();
 
